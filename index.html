@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Music Player Dev by Cris</title>
+
+        <link rel="icon" type="image/x-icon" href="./assets/img/music-player-favicon.png" />
+        <!-- Popins font -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="/css/main.css" />
+        <script src="https://kit.fontawesome.com/bf5e67e6e8.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="musicplayer">
+                <h1 id="header">Music player</h1>
+                <div id="player">
+                    <!-- DashBoard -->
+                    <div class="dashboard">
+                        <!-- Header -->
+                        <div class="dashboard__header">
+                            <i class="fa-solid fa-chevron-down btn-down btn"></i>
+                            <h3 class="status">Now playing</h3>
+                            <div class="switchtheme">
+                                <i class="fa-regular fa-moon btn-moon btn"></i>
+                                <i class="fa-regular fa-sun btn-sun btn"></i>
+                            </div>
+                        </div>
+
+                        <!-- CD -->
+                        <div class="dashboard__cd">
+                            <div class="dashboard__cd-thumb"></div>
+                        </div>
+                        <h2 class="dashboard__songname"></h2>
+
+                        <!-- Duration-bar -->
+                        <div class="dashboard__duration-bar">
+                            <span class="time-left">0:00</span>
+                            <input min="0" max="100" value="0" step="1" type="range" class="progress" />
+                            <span class="time-right">3:56</span>
+                        </div>
+                        <!-- Control -->
+                        <div class="dashboard__control">
+                            <i class="fa-solid fa-heart btn btn-heart"></i>
+                            <i class="fa-solid fa-rotate-right btn btn-repeat"></i>
+                            <i class="fa-solid fa-backward-step btn btn-back"></i>
+                            <div class="btn-togger-play">
+                                <i class="fa-solid fa-play btn btn-play"></i>
+                                <i class="fa-solid fa-pause btn btn-pause"></i>
+                            </div>
+
+                            <i class="fa-solid fa-forward-step btn btn-next"></i>
+                            <i class="fa-solid fa-shuffle btn btn-random"></i>
+
+                            <div class="btn-volume">
+                                <i class="fa-solid fa-volume-high btn btn-volume-high"></i>
+                                <i class="fa-solid fa-volume-low btn btn-volume-low"></i>
+                                <i class="fa-solid fa-volume-xmark btn btn-volume-mute"></i>
+                                <input type="range" class="volume-bar" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Playlist -->
+            <div class="playlist"></div>
+        </div>
+
+        <audio id="audio" src=""></audio>
+
+        <script src="./index.js"></script>
+    </body>
+</html>
