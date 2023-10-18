@@ -18,6 +18,7 @@ const randomBtn = $('.btn-random');
 const repeatBtn = $('.btn-repeat');
 const heartBtn = $('.btn-heart');
 const volumeBtn = $('.btn-volume');
+const volumeBar = $('.volume-bar');
 
 const app = {
     currentIndex: 0, //first-index of list songs
@@ -26,7 +27,8 @@ const app = {
     isRepeat: false,
     isRandom: false,
     isHeart: false,
-    isMute: false,
+    isMuteVolume: false,
+    isLowVolume: false,
     //load infro from json local storage
     config: JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY)) || {},
     setConfig(key, value) {
@@ -103,13 +105,13 @@ const app = {
         <div class="song ${index === this.currentIndex ? 'songplaying' : ''}" index="${index}">
             <div>
                 <img class="song__thumb" src="${song.image}" alt="" />
-            </div>
-            <div class="song__body">
-                <h3 class="title">${song.name}</h3>
-                <div class="author">${song.singer}</div>
-            </div>
-            <div class="song__time">${audio.duration}</div>
-        </div>`;
+                </div>
+                <div class="song__body">
+                    <h3 class="title">${song.name}</h3>
+                    <div class="author">${song.singer}</div>
+                </div>
+                <i class="fa-solid fa-ellipsis option-btn"></i>
+             </div>`;
         });
         playList.innerHTML = htmls.join('');
     },
@@ -187,6 +189,44 @@ const app = {
             this.isPlaying ? audio.play() : audio.pause();
         };
 
+        //Handle volume
+
+        volumeBtn.onclick = () => {
+            this.isMute = !this.isMute;
+            volumeBtn.classList.toggle('mute', this.isMute);
+            if (_this.isMute) {
+                audio.volume = 0;
+            } else {
+                audio.volume = 1;
+            }
+            volumeBar.value = audio.volume * 100;
+            volumeBar.style.background = `linear-gradient(to right, rgb(147, 113, 243) ${volumeBar.value}%, rgb(214, 214, 214) ${volumeBar.value}%`;
+        };
+        volumeBar.onclick = (e) => {
+            e.stopPropagation();
+        };
+        //Handle volume bar
+        volumeBar.oninput = (e) => {
+            const currentVolume = e.target.value / 100;
+            audio.volume = currentVolume;
+
+            switch (true) {
+                case currentVolume === 0:
+                    this.isLowVolume = false;
+                    this.isMuteVolume = true;
+                    break;
+                case currentVolume < 0.4:
+                    this.isMuteVolume = false;
+                    this.isLowVolume = true;
+                    break;
+                default:
+                    this.isLowVolume = false;
+            }
+            volumeBtn.classList.toggle('mute', this.isMuteVolume);
+            volumeBtn.classList.toggle('low', this.isLowVolume);
+            volumeBar.style.background = `linear-gradient(to right, rgb(147, 113, 243) ${volumeBar.value}%, rgb(214, 214, 214) ${volumeBar.value}%`;
+        };
+
         //Next/Back/random/rotate song
         nextBtn.onclick = () => {
             if (this.isRandom) {
@@ -195,18 +235,23 @@ const app = {
                 _this.nextSong();
             }
             audio.play();
-            _this.render();
             _this.scrolltoAciveSong();
+            _this.render();
         };
         backBtn.onclick = () => {
-            if (this.isRandom) {
-                _this.randomSong();
+            if (audio.currentTime < 6) {
+                if (this.isRandom) {
+                    _this.randomSong();
+                } else {
+                    _this.backSong();
+                }
             } else {
-                _this.backSong();
+                audio.currentTime = 0;
             }
+
             audio.play();
-            _this.render();
             _this.scrolltoAciveSong();
+            _this.render();
         };
         randomBtn.onclick = () => {
             this.isRandom = !this.isRandom;
@@ -230,17 +275,6 @@ const app = {
                 audio.play();
             } else {
                 nextBtn.click();
-            }
-        };
-
-        //Handle volume
-        volumeBtn.onclick = () => {
-            this.isMute = !this.isMute;
-            volumeBtn.classList.toggle('mute', this.isMute);
-            if (_this.isMute) {
-                audio.volume = 0;
-            } else {
-                audio.volume = 1;
             }
         };
 

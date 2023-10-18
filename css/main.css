@@ -19,7 +19,7 @@ body {
 }
 
 .btn {
-  font-size: 23px;
+  font-size: 25px;
   padding: 13px;
   width: 49px;
   height: 49px;
@@ -83,6 +83,20 @@ body {
 }
 .dashboard__header .btn-moon {
   display: none;
+  animation: moonDownIn ease 0.6s;
+}
+.dashboard__header .btn-moon:hover {
+  transition: 0.6s ease;
+  color: #9371f3;
+  rotate: 60deg;
+}
+.dashboard__header .btn-sun {
+  animation: sunUpIn ease 0.6s;
+}
+.dashboard__header .btn-sun:hover {
+  transition: 0.6s ease;
+  color: #9371f3;
+  rotate: 60deg;
 }
 .dashboard__header .switchtheme.light .btn-moon {
   display: inline-block;
@@ -132,7 +146,12 @@ body {
 .dashboard__control .btn-togger-play {
   background-color: #9371f3;
   border-radius: 50%;
-  width: 49px;
+  width: 54px;
+  height: 54px;
+}
+.dashboard__control .btn-pause,
+.dashboard__control .btn-play {
+  font-size: 28px;
 }
 .dashboard__control .btn-pause:hover,
 .dashboard__control .btn-play:hover {
@@ -163,19 +182,25 @@ body {
 .dashboard__control .btn-volume.mute .btn-volume-high {
   display: none;
 }
+.dashboard__control .btn-volume.low .btn-volume-low {
+  display: inline-block;
+}
+.dashboard__control .btn-volume.low .btn-volume-high {
+  display: none;
+}
 .dashboard__control .btn-volume .volume-bar {
   position: absolute;
-  top: -46px;
+  top: -55px;
   right: -24px;
   transform: rotate(-90deg);
   width: 90px;
-  transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+  transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
   cursor: pointer;
-  background: linear-gradient(to right, rgb(147, 113, 243) 31%, rgb(214, 214, 214) 31%);
   appearance: none;
   border-radius: 10px;
   height: 12px;
   visibility: hidden;
+  background: linear-gradient(to right, rgb(147, 113, 243) 100%, rgb(214, 214, 214) 100%);
 }
 .dashboard__control .btn-volume:hover .volume-bar {
   visibility: visible;
@@ -184,7 +209,7 @@ body {
 .playlist {
   margin-top: 484px;
   padding: 0 20px;
-  height: 64vh;
+  height: 57vh;
   overflow: auto;
 }
 .playlist .song {
@@ -223,6 +248,9 @@ body {
 .playlist .song:active {
   opacity: 0.8;
 }
+.playlist .song .option-btn {
+  font-size: 20px;
+}
 
 #dev {
   margin: 10px;
@@ -240,6 +268,27 @@ body {
 .icon-facebook {
   padding: 6px;
   color: #5a228f;
+}
+
+@keyframes moonDownIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes sunUpIn {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /*# sourceMappingURL=main.css.map */

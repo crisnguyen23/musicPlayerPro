@@ -39,12 +39,13 @@
                         </div>
                         <h2 class="dashboard__songname"></h2>
 
-                        <!-- Duration-bar -->
-                        <div class="dashboard__duration-bar">
+                         <!-- Duration-bar -->
+                         <div class="dashboard__duration-bar">
                             <span class="time-left">0:00</span>
                             <input min="0" max="100" value="0" step="1" type="range" class="progress" />
                             <span class="time-right">3:56</span>
                         </div>
+
                         <!-- Control -->
                         <div class="dashboard__control">
                             <i class="fa-solid fa-heart btn btn-heart"></i>
@@ -62,21 +63,20 @@
                                 <i class="fa-solid fa-volume-high btn btn-volume-high"></i>
                                 <i class="fa-solid fa-volume-low btn btn-volume-low"></i>
                                 <i class="fa-solid fa-volume-xmark btn btn-volume-mute"></i>
-                                <input type="range" class="volume-bar" />
+                                <input type="range" class="volume-bar" min="0" max="100" value="100" step="1"/>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- Playlist -->
-            <div class="playlist"></div>
-            <div id="dev">
-                - Dev by
-                <a id="linkfb" href="https://www.facebook.com/longbka18"
-                    >Cris<i class="fa-brands fa-facebook icon-facebook"></i></a
-                >- Oct/2023
-            </div>
-        </div>
+                <div class="playlist"></div>
+                <div id="dev">
+                    - Dev by
+                    <a id="linkfb" href="https://www.facebook.com/longbka18"
+                        >Cris<i class="fa-brands fa-facebook icon-facebook"></i></a
+                    >- Oct/2023
+                </div>
 
         <audio id="audio" src=""></audio>
 

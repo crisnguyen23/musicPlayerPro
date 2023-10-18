@@ -23,7 +23,7 @@ body {
 
 // Common
 .btn {
-    font-size: 23px;
+    font-size: 25px;
     padding: 13px;
     width: 49px;
     height: 49px;
@@ -96,6 +96,23 @@ body {
 
         .btn-moon {
             display: none;
+            animation: moonDownIn ease 0.6s;
+
+            &:hover {
+                transition: 0.6s ease;
+                color: $primary-color-dark;
+                rotate: 60deg;
+            }
+        }
+
+        .btn-sun {
+            animation: sunUpIn ease 0.6s;
+
+            &:hover {
+                transition: 0.6s ease;
+                color: $primary-color-dark;
+                rotate: 60deg;
+            }
         }
 
         .switchtheme.light {
@@ -158,11 +175,17 @@ body {
         .btn-togger-play {
             background-color: $primary-color-dark;
             border-radius: 50%;
-            width: 49px;
+            width: 54px;
+            height: 54px;
+        }
+
+        .btn-heart {
+            // display: none;
         }
 
         .btn-pause,
         .btn-play {
+            font-size: 28px;
             &:hover {
                 opacity: 0.6;
                 color: #fff;
@@ -182,11 +205,8 @@ body {
                 display: none;
             }
         }
-        .btn-heart {
-        }
 
         .btn-volume {
-            // display: none;
             position: relative;
             &-low {
                 display: none;
@@ -206,19 +226,29 @@ body {
                 }
             }
 
+            &.low {
+                .btn-volume-low {
+                    display: inline-block;
+                }
+
+                .btn-volume-high {
+                    display: none;
+                }
+            }
+
             .volume-bar {
                 position: absolute;
-                top: -46px;
+                top: -55px;
                 right: -24px;
                 transform: rotate(-90deg);
                 width: 90px;
-                transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+                transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
                 cursor: pointer;
-                background: linear-gradient(to right, rgb(147, 113, 243) 31%, rgb(214, 214, 214) 31%);
                 appearance: none;
                 border-radius: 10px;
                 height: 12px;
                 visibility: hidden;
+                background: linear-gradient(to right, rgb(147, 113, 243) 100%, rgb(214, 214, 214) 100%);
             }
 
             &:hover {
@@ -233,9 +263,8 @@ body {
 .playlist {
     margin-top: 484px;
     padding: 0 20px;
-    height: 64vh;
+    height: 57vh;
     overflow: auto;
-
     .song {
         background-image: linear-gradient(
             -45deg,
@@ -283,6 +312,10 @@ body {
         &:active {
             opacity: 0.8;
         }
+
+        .option-btn {
+            font-size: 20px;
+        }
     }
 }
 
@@ -302,4 +335,26 @@ body {
 .icon-facebook {
     padding: 6px;
     color: #5a228f;
+}
+
+@keyframes moonDownIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes sunUpIn {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
