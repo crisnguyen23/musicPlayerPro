@@ -29,7 +29,8 @@ body {
     height: 49px;
 
     &:hover {
-        color: $primary-color-dark;
+        // background-color: $primary-color-dark;
+        // opacity: 0.6;
         cursor: pointer;
     }
 }
@@ -206,6 +207,7 @@ body {
             }
         }
 
+        //volume
         .btn-volume {
             position: relative;
             &-low {
@@ -224,6 +226,10 @@ body {
                 .btn-volume-high {
                     display: none;
                 }
+
+                .btn-volume-low {
+                    display: none;
+                }
             }
 
             &.low {
@@ -232,6 +238,10 @@ body {
                 }
 
                 .btn-volume-high {
+                    display: none;
+                }
+
+                .btn-volume-mute {
                     display: none;
                 }
             }

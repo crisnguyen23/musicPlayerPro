@@ -18,19 +18,25 @@ const randomBtn = $('.btn-random');
 const repeatBtn = $('.btn-repeat');
 const heartBtn = $('.btn-heart');
 const volumeBtn = $('.btn-volume');
+const muteVolumeBtn = $('.btn-volume-mute');
+const lowVolumeBtn = $('.btn-volume-low');
+const highVolumeBtn = $('.btn-volume-high');
 const volumeBar = $('.volume-bar');
 
 const app = {
+    isMuteVolume: false,
+    isLowVolume: false,
     currentIndex: 0, //first-index of list songs
     isLightTheme: false,
     isPlaying: false,
-    isRepeat: false,
-    isRandom: false,
-    isHeart: false,
-    isMuteVolume: false,
-    isLowVolume: false,
     //load infro from json local storage
-    config: JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY)) || {},
+    config: JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY)) || {
+        isRepeat: false,
+        isRandom: false,
+        isHeart: false,
+        currentVolume: 1,
+        savedVolume: 1,
+    },
     setConfig(key, value) {
         this.config[key] = value;
         localStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify(this.config));
@@ -126,7 +132,6 @@ const app = {
     },
 
     handleEvents() {
-        const _this = this;
         //Switch theme when click
         switchTheme.onclick = () => {
             this.isLightTheme = !this.isLightTheme;
@@ -189,69 +194,72 @@ const app = {
             this.isPlaying ? audio.play() : audio.pause();
         };
 
-        //Handle volume
-
-        volumeBtn.onclick = () => {
-            this.isMute = !this.isMute;
-            volumeBtn.classList.toggle('mute', this.isMute);
-            if (_this.isMute) {
-                audio.volume = 0;
-            } else {
-                audio.volume = 1;
-            }
-            volumeBar.value = audio.volume * 100;
-            volumeBar.style.background = `linear-gradient(to right, rgb(147, 113, 243) ${volumeBar.value}%, rgb(214, 214, 214) ${volumeBar.value}%`;
+        //Handle volume Adjust area
+        highVolumeBtn.onclick = () => {
+            this.setConfig('savedVolume', audio.volume);
+            audio.volume = 0;
+            this.renderVolume();
         };
+        lowVolumeBtn.onclick = () => {
+            this.setConfig('savedVolume', audio.volume);
+            audio.volume = 0;
+            this.renderVolume();
+        };
+        muteVolumeBtn.onclick = () => {
+            audio.volume = this.config.savedVolume;
+            this.renderVolume();
+        };
+
         volumeBar.onclick = (e) => {
             e.stopPropagation();
         };
+
         //Handle volume bar
         volumeBar.oninput = (e) => {
-            const currentVolume = e.target.value / 100;
-            audio.volume = currentVolume;
-
-            switch (true) {
-                case currentVolume === 0:
-                    this.isLowVolume = false;
-                    this.isMuteVolume = true;
-                    break;
-                case currentVolume < 0.4:
-                    this.isMuteVolume = false;
-                    this.isLowVolume = true;
-                    break;
-                default:
-                    this.isLowVolume = false;
-            }
-            volumeBtn.classList.toggle('mute', this.isMuteVolume);
-            volumeBtn.classList.toggle('low', this.isLowVolume);
-            volumeBar.style.background = `linear-gradient(to right, rgb(147, 113, 243) ${volumeBar.value}%, rgb(214, 214, 214) ${volumeBar.value}%`;
+            audio.volume = e.target.value / 100;
+            this.setConfig('currentVolume', audio.volume);
+            this.renderVolume();
         };
 
+        //---in mobile:touch divice
+        let isTouchingVolume = false;
+        volumeBar.ontouchstart = () => {
+            isTouchingVolume = true;
+        };
+
+        document.ontouchmove = (e) => {
+            if (isTouchingVolume) {
+                e.preventDefault(); // stop scroll when touch move adjust mobile
+            }
+        };
+        document.ontouchend = (e) => {
+            isTouchingVolume = false;
+        };
+        // -------------------
         //Next/Back/random/rotate song
         nextBtn.onclick = () => {
             if (this.isRandom) {
-                _this.randomSong();
+                this.randomSong();
             } else {
-                _this.nextSong();
+                this.nextSong();
             }
             audio.play();
-            _this.scrolltoAciveSong();
-            _this.render();
+            this.scrolltoAciveSong();
+            this.render();
         };
         backBtn.onclick = () => {
             if (audio.currentTime < 6) {
                 if (this.isRandom) {
-                    _this.randomSong();
+                    this.randomSong();
                 } else {
-                    _this.backSong();
+                    this.backSong();
                 }
             } else {
                 audio.currentTime = 0;
             }
-
             audio.play();
-            _this.scrolltoAciveSong();
-            _this.render();
+            this.scrolltoAciveSong();
+            this.render();
         };
         randomBtn.onclick = () => {
             this.isRandom = !this.isRandom;
@@ -282,9 +290,9 @@ const app = {
         playList.onclick = (e) => {
             const songClick = e.target.closest('.song:not(.songplaying)');
             if (songClick) {
-                _this.currentIndex = +songClick.getAttribute('index');
-                _this.loadCurrentSong();
-                _this.render();
+                this.currentIndex = +songClick.getAttribute('index');
+                this.loadCurrentSong();
+                this.render();
                 audio.play();
             }
         };
@@ -303,11 +311,6 @@ const app = {
         cdThumb.style.backgroundImage = `url(${this.currentSong.image})`;
         audio.src = this.currentSong.path;
     },
-    loadConfig() {
-        this.isRandom = this.config.isRandom;
-        this.isRepeat = this.config.isRepeat;
-        this.isHeart = this.config.isHeart;
-    },
     //Control features of btn
     nextSong() {
         this.currentIndex++;
@@ -322,6 +325,28 @@ const app = {
             this.currentIndex = 0;
         }
         this.loadCurrentSong();
+    },
+
+    renderVolume() {
+        switch (true) {
+            case audio.volume <= 0:
+                this.isLowVolume = false;
+                this.isMuteVolume = true;
+                break;
+            case audio.volume < 0.4:
+                this.isMuteVolume = false;
+                this.isLowVolume = true;
+                break;
+            default:
+                this.isLowVolume = false;
+                this.isMuteVolume = false;
+        }
+        volumeBtn.classList.toggle('mute', this.isMuteVolume);
+        volumeBtn.classList.toggle('low', this.isLowVolume);
+        volumeBar.style.background = `linear-gradient(to right, rgb(147, 113, 243) ${
+            audio.volume * 100
+        }%, rgb(214, 214, 214) ${audio.volume * 100}%`;
+        volumeBar.value = audio.volume * 100;
     },
     randomSong() {
         let newIndex;
@@ -338,6 +363,12 @@ const app = {
             block: 'nearest',
         });
     },
+    loadConfig() {
+        this.isRandom = this.config.isRandom;
+        this.isRepeat = this.config.isRepeat;
+        this.isHeart = this.config.isHeart;
+        audio.volume = this.config.currentVolume;
+    },
 
     start() {
         this.loadConfig();
@@ -349,6 +380,7 @@ const app = {
         this.render();
 
         //DIsplay inital staus
+        this.renderVolume();
         heartBtn.classList.toggle('active', this.isHeart);
         repeatBtn.classList.toggle('active', this.isRepeat);
         randomBtn.classList.toggle('active', this.isRandom);

@@ -25,7 +25,6 @@ body {
   height: 49px;
 }
 .btn:hover {
-  color: #9371f3;
   cursor: pointer;
 }
 
@@ -182,10 +181,16 @@ body {
 .dashboard__control .btn-volume.mute .btn-volume-high {
   display: none;
 }
+.dashboard__control .btn-volume.mute .btn-volume-low {
+  display: none;
+}
 .dashboard__control .btn-volume.low .btn-volume-low {
   display: inline-block;
 }
 .dashboard__control .btn-volume.low .btn-volume-high {
+  display: none;
+}
+.dashboard__control .btn-volume.low .btn-volume-mute {
   display: none;
 }
 .dashboard__control .btn-volume .volume-bar {
