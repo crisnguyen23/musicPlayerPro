@@ -131,12 +131,12 @@ const app = {
             switchTheme.classList.toggle('light', this.isLightTheme);
         };
 
-        //Zoomin-out CD thumb
+        //Zoomin-out CD thumb when scroll
         const cdWidth = cd.offsetWidth;
         document.onscroll = () => {
             const scrollTop = window.scrollY || document.documentElement.scrollTop;
             const newCdWidth = cdWidth - scrollTop;
-            cd.style.width = newCdWidth > 0 ? newCdWidth + 'px' : 0;
+            cd.style.width = newCdWidth >= 0 ? newCdWidth + 'px' : 0;
             cd.style.opacity = newCdWidth / cdWidth;
         };
 
@@ -301,7 +301,7 @@ const app = {
     scrolltoAciveSong() {
         $('.song.songplaying').scrollIntoView({
             behavior: 'smooth',
-            block: 'start',
+            block: 'nearest',
         });
     },
 
