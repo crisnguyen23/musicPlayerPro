@@ -1,0 +1,11 @@
+@media (width < 480px) {
+    .btn {
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    .playlist.mini {
+        height: 70vh;
+    }
+}

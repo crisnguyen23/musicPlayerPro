@@ -3,17 +3,31 @@ const $$ = document.querySelectorAll.bind(document);
 
 const PLAYER_STORAGE_KEY = 'Cris_player';
 
+const playBtns = $$('.btn-togger-play');
+const nextBtns = $$('.btn-next');
+const backBtns = $$('.btn-back');
+
 const audio = $('#audio');
 const playList = $('.playlist');
+const playerMini = $('.playermini');
+const playerMiniThumb = $('.playermini__thumb');
+const playerMiniTitle = $('.playermini__body__title');
+const playerMiniAuthor = $('.playermini__body__author');
+
+const switchListUI = $('.btn-down');
+const closeList = $('.btn-closelist');
+const dashboard = $('.dashboard');
+const playlistplus = $('.playlistplus');
+const playlistplusHeader = $('.playlistplus__header');
+
 const switchTheme = $('.switchtheme');
+
 const cd = $('.dashboard__cd');
 const cdThumb = $('.dashboard__cd-thumb');
 const cdName = $('.dashboard__songname');
 const timeLeft = $('.time-left');
 const timeRight = $('.time-right');
 const progress = $('.progress');
-const nextBtn = $('.btn-next');
-const backBtn = $('.btn-back');
 const randomBtn = $('.btn-random');
 const repeatBtn = $('.btn-repeat');
 const heartBtn = $('.btn-heart');
@@ -120,6 +134,9 @@ const app = {
              </div>`;
         });
         playList.innerHTML = htmls.join('');
+        playerMiniThumb.src = this.currentSong.image;
+        playerMiniTitle.textContent = this.currentSong.name;
+        playerMiniAuthor.textContent = this.currentSong.singer;
     },
 
     defineProperties() {
@@ -138,7 +155,7 @@ const app = {
             switchTheme.classList.toggle('light', this.isLightTheme);
         };
 
-        //Zoomin-out CD thumb when scroll
+        // //Zoomin-out CD thumb when scroll
         const cdWidth = cd.offsetWidth;
         document.onscroll = () => {
             const scrollTop = window.scrollY || document.documentElement.scrollTop;
@@ -155,21 +172,28 @@ const app = {
         cdThumbAnimate.pause();
 
         // Click play
-        const playBtn = $('.btn-togger-play');
-        playBtn.onclick = () => {
-            //arrow function do not create closure => still use this
-            this.isPlaying ? audio.pause() : audio.play();
-        };
+        playBtns.forEach(
+            (playBtn) =>
+                (playBtn.onclick = () => {
+                    //arrow function do not create closure => still use this
+                    this.isPlaying ? audio.pause() : audio.play();
+                    console.log(this.isPlaying);
+                }),
+        );
 
         //when audio playing/pause
         audio.onplay = () => {
             this.isPlaying = true;
-            playBtn.classList.add('playing');
+            playBtns.forEach((playBtn) => {
+                playBtn.classList.add('playing');
+            });
             cdThumbAnimate.play();
         };
         audio.onpause = () => {
             this.isPlaying = false;
-            playBtn.classList.remove('playing');
+            playBtns.forEach((playBtn) => {
+                playBtn.classList.remove('playing');
+            });
             cdThumbAnimate.pause();
         };
 
@@ -237,30 +261,34 @@ const app = {
         };
         // -------------------
         //Next/Back/random/rotate song
-        nextBtn.onclick = () => {
-            if (this.isRandom) {
-                this.randomSong();
-            } else {
-                this.nextSong();
-            }
-            audio.play();
-            this.scrolltoAciveSong();
-            this.render();
-        };
-        backBtn.onclick = () => {
-            if (audio.currentTime < 6) {
+        nextBtns.forEach((nextBtn) => {
+            nextBtn.onclick = () => {
                 if (this.isRandom) {
                     this.randomSong();
                 } else {
-                    this.backSong();
+                    this.nextSong();
                 }
-            } else {
-                audio.currentTime = 0;
-            }
-            audio.play();
-            this.scrolltoAciveSong();
-            this.render();
-        };
+                audio.play();
+                this.scrolltoAciveSong();
+                this.render();
+            };
+        });
+        backBtns.forEach((backBtn) => {
+            backBtn.onclick = () => {
+                if (audio.currentTime < 6) {
+                    if (this.isRandom) {
+                        this.randomSong();
+                    } else {
+                        this.backSong();
+                    }
+                } else {
+                    audio.currentTime = 0;
+                }
+                audio.play();
+                this.scrolltoAciveSong();
+                this.render();
+            };
+        });
         randomBtn.onclick = () => {
             this.isRandom = !this.isRandom;
             this.setConfig('isRandom', this.isRandom);
@@ -282,7 +310,7 @@ const app = {
             if (this.isRepeat) {
                 audio.play();
             } else {
-                nextBtn.click();
+                nextBtns[0].click();
             }
         };
 
@@ -295,6 +323,25 @@ const app = {
                 this.render();
                 audio.play();
             }
+        };
+
+        switchListUI.onclick = () => {
+            dashboard.style.display = 'none';
+            playlistplusHeader.style.display = '';
+            playList.classList.add('mini');
+            playerMini.classList.add('mini');
+            playlistplus.classList.add('mini');
+            playerMini.style.display = 'flex';
+            this.scrolltoAciveSong();
+        };
+        closeList.onclick = () => {
+            playList.classList.remove('mini');
+            playlistplus.classList.remove('mini');
+            playerMini.classList.remove('mini');
+            dashboard.style.display = '';
+            playlistplusHeader.style.display = 'none';
+            playerMini.style.display = 'none';
+            this.scrolltoAciveSong();
         };
     },
 
@@ -360,7 +407,7 @@ const app = {
     scrolltoAciveSong() {
         $('.song.songplaying').scrollIntoView({
             behavior: 'smooth',
-            block: 'nearest',
+            // block: 'end',
         });
     },
     loadConfig() {
@@ -374,10 +421,11 @@ const app = {
         this.loadConfig();
 
         this.defineProperties();
+        this.render();
+
         this.handleEvents();
 
         this.loadCurrentSong();
-        this.render();
 
         //DIsplay inital staus
         this.renderVolume();
