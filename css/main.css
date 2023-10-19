@@ -54,8 +54,8 @@ body.light {
 }
 
 .header {
-  height: 7vh;
-  margin-bottom: 1vh;
+  height: 7dvh;
+  margin-bottom: 1dvh;
   font-weight: 700;
   font-size: 40px;
   text-transform: uppercase;
@@ -80,7 +80,7 @@ body.light {
 }
 
 .dashboard {
-  height: 51vh;
+  height: 51dvh;
   background-image: linear-gradient(-45deg, rgba(255, 60, 172, 0.6) 0%, rgba(120, 75, 160, 0.4) 50%, rgba(43, 134, 197, 0.3) 100%);
   background-color: rgba(0, 0, 0, 0.4);
   box-shadow: 0px 0px 7px 3px rgba(255, 255, 255, 0.4);
@@ -94,8 +94,8 @@ body.light {
   background-image: linear-gradient(-145deg, rgba(68, 194, 255, 0.7) 0%, rgba(249, 147, 147, 0.4) 80%);
 }
 .dashboard__header {
-  height: 6vh;
-  margin-bottom: 1vh;
+  height: 6dvh;
+  margin-bottom: 1dvh;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -127,8 +127,8 @@ body.light {
   display: none;
 }
 .dashboard__cd {
-  height: 24vh;
-  width: 24vh;
+  height: 24dvh;
+  width: 24dvh;
   display: flex;
   margin: auto;
 }
@@ -139,12 +139,12 @@ body.light {
   box-shadow: 0 0 8px 5px rgba(255, 255, 255, 0.5);
 }
 .dashboard__songname {
-  margin: 2vh 0;
-  height: 3vh;
+  margin: 2dvh 0;
+  height: 3dvh;
   font-size: 20px;
 }
 .dashboard__control {
-  height: 7vh;
+  height: 7dvh;
   display: flex;
   justify-content: space-between;
 }
@@ -217,8 +217,8 @@ body.light {
   visibility: visible;
 }
 .dashboard__duration-bar {
-  height: 4vh;
-  margin: 1vh 0;
+  height: 4dvh;
+  margin: 1dvh 0;
   display: flex;
   padding: 6px 0;
   align-items: center;
@@ -238,15 +238,16 @@ body.light {
 }
 
 .playlist {
-  height: 34vh;
-  margin-top: 60vh;
+  height: 34dvh;
+  margin-top: 60dvh;
   padding: 0 20px;
   overflow: auto;
-  margin-bottom: 1vh;
+  margin-bottom: 1dvh;
 }
 .playlist.mini {
-  height: 68vh;
-  margin: 1vh 10px;
+  height: 68dvh;
+  margin: 1dvh;
+  margin-bottom: 0;
   padding: 10px;
   padding-top: 0px;
 }
@@ -299,11 +300,10 @@ body.light {
 }
 
 .playlistplus.mini {
-  height: 86vh;
-  margin-top: 8vh;
-  margin-bottom: 1vh;
+  height: 86dvh;
+  width: 96dvw;
+  margin: 8dvh 2dvw 1dvh 2dvw;
   max-width: inherit;
-  width: 100%;
   background-image: linear-gradient(-45deg, rgba(255, 60, 172, 0.6) 0%, rgba(120, 75, 160, 0.4) 50%, rgba(43, 134, 197, 0.3) 100%);
   background-color: rgba(0, 0, 0, 0.4);
   box-shadow: 0px 0px 7px 3px rgba(255, 255, 255, 0.4);
@@ -313,7 +313,7 @@ body.light {
   background-image: linear-gradient(-145deg, rgba(68, 194, 255, 0.7) 0%, rgba(249, 147, 147, 0.4) 80%);
 }
 .playlistplus__header {
-  height: 7vh;
+  height: 7dvh;
   padding: 10px 0px 0 10px;
   display: flex;
   justify-content: space-between;
@@ -324,7 +324,7 @@ body.light {
 }
 
 .playermini {
-  height: 9vh;
+  height: 10dvh;
   background-image: linear-gradient(-45deg, rgba(255, 60, 172, 0.5) 0%, rgba(120, 75, 160, 0.5) 50%, rgba(43, 134, 197, 0.5) 100%);
   background-color: var(--primary-color);
   justify-content: space-between;
@@ -386,7 +386,7 @@ body.light {
 }
 
 #dev {
-  height: 5vh;
+  height: 5dvh;
   margin: 0;
   text-align: center;
   font-weight: 500;
