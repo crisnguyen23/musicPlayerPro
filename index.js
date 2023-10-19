@@ -7,6 +7,7 @@ const playBtns = $$('.btn-togger-play');
 const nextBtns = $$('.btn-next');
 const backBtns = $$('.btn-back');
 
+const headerMusic = $('.header');
 const audio = $('#audio');
 const playList = $('.playlist');
 const playerMini = $('.playermini');
@@ -25,9 +26,6 @@ const switchTheme = $('.switchtheme');
 const cd = $('.dashboard__cd');
 const cdThumb = $('.dashboard__cd-thumb');
 const cdName = $('.dashboard__songname');
-const timeLeft = $('.time-left');
-const timeRight = $('.time-right');
-const progress = $('.progress');
 const randomBtn = $('.btn-random');
 const repeatBtn = $('.btn-repeat');
 const heartBtn = $('.btn-heart');
@@ -37,14 +35,19 @@ const lowVolumeBtn = $('.btn-volume-low');
 const highVolumeBtn = $('.btn-volume-high');
 const volumeBar = $('.volume-bar');
 
+const timeLeft = $('.time-left');
+const timeRight = $('.time-right');
+const progress = $('.progress');
+
 const app = {
+    currentIndex: 0,
     isMuteVolume: false,
     isLowVolume: false,
-    currentIndex: 0, //first-index of list songs
     isLightTheme: false,
     isPlaying: false,
     //load infro from json local storage
     config: JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY)) || {
+        // currentIndex: 0,
         isRepeat: false,
         isRandom: false,
         isHeart: false,
@@ -64,7 +67,7 @@ const app = {
             image: './assets/img/lactroi.png',
         },
         {
-            name: 'Sống cho hết đời thanh xuân 4',
+            name: 'SCHDTX 4',
             singer: 'Dick x Ngắn',
             path: './assets/music/songChoHetDoiThanhXuan.mp3',
             image: './assets/img/songchohetdoithanhxuan.png',
@@ -122,7 +125,9 @@ const app = {
     render() {
         const htmls = this.songs.map((song, index) => {
             return ` 
-        <div class="song ${index === this.currentIndex ? 'songplaying' : ''}" index="${index}">
+        <div class="song ${this.isLightTheme ? 'light' : ''} ${
+                index === this.currentIndex ? 'songplaying' : ''
+            }" index="${index}">
             <div>
                 <img class="song__thumb" src="${song.image}" alt="" />
                 </div>
@@ -153,16 +158,40 @@ const app = {
         switchTheme.onclick = () => {
             this.isLightTheme = !this.isLightTheme;
             switchTheme.classList.toggle('light', this.isLightTheme);
+            document.body.classList.toggle('light', this.isLightTheme);
+            headerMusic.classList.toggle('light', this.isLightTheme);
+            dashboard.classList.toggle('light', this.isLightTheme);
+            playlistplus.classList.toggle('light', this.isLightTheme);
+            this.render();
         };
 
-        // //Zoomin-out CD thumb when scroll
-        const cdWidth = cd.offsetWidth;
-        document.onscroll = () => {
-            const scrollTop = window.scrollY || document.documentElement.scrollTop;
-            const newCdWidth = cdWidth - scrollTop;
-            cd.style.width = newCdWidth >= 0 ? newCdWidth + 'px' : 0;
-            cd.style.opacity = newCdWidth / cdWidth;
+        switchListUI.onclick = () => {
+            dashboard.style.display = 'none';
+            playlistplusHeader.style.display = '';
+            playList.classList.add('mini');
+            playerMini.classList.add('mini');
+            playlistplus.classList.add('mini');
+            playerMini.style.display = 'flex';
+            this.scrolltoAciveSong();
         };
+        closeList.onclick = () => {
+            playList.classList.remove('mini');
+            playlistplus.classList.remove('mini');
+            playerMini.classList.remove('mini');
+            dashboard.style.display = '';
+            playlistplusHeader.style.display = 'none';
+            playerMini.style.display = 'none';
+            this.scrolltoAciveSong();
+        };
+
+        // // //Zoomin-out CD thumb when scroll
+        // const cdWidth = cd.offsetWidth;
+        // document.onscroll = () => {
+        //     const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        //     const newCdWidth = cdWidth - scrollTop;
+        //     cd.style.width = newCdWidth >= 0 ? newCdWidth + 'px' : 0;
+        //     cd.style.opacity = newCdWidth / cdWidth;
+        // };
 
         //Handle CD rotate //need learn more animate API
         const cdThumbAnimate = cdThumb.animate([{ transform: 'rotate(360deg)' }], {
@@ -197,69 +226,6 @@ const app = {
             cdThumbAnimate.pause();
         };
 
-        //When audiotime change
-        audio.ontimeupdate = () => {
-            //when dont load audio: audio.duration = NaN
-            if (audio.duration) {
-                timeLeft.textContent = this.formatTime(audio.currentTime);
-                // const remainTime = this.formatTime(audio.duration) - audio.currentTime;  `-${remainTime}`
-                timeRight.textContent = this.formatTime(audio.duration);
-
-                const progressPercent = Math.floor((audio.currentTime / audio.duration) * 100);
-                progress.value = progressPercent;
-                progress.style.background = `linear-gradient(to right, rgb(147, 113, 243) ${progressPercent}%, rgb(214, 214, 214) ${progressPercent}%)`;
-            }
-        };
-
-        //Handle seeking audio
-        progress.oninput = (e) => {
-            const seekingTime = audio.duration * (e.target.value / 100);
-            audio.currentTime = Math.floor(seekingTime);
-            this.isPlaying ? audio.play() : audio.pause();
-        };
-
-        //Handle volume Adjust area
-        highVolumeBtn.onclick = () => {
-            this.setConfig('savedVolume', audio.volume);
-            audio.volume = 0;
-            this.renderVolume();
-        };
-        lowVolumeBtn.onclick = () => {
-            this.setConfig('savedVolume', audio.volume);
-            audio.volume = 0;
-            this.renderVolume();
-        };
-        muteVolumeBtn.onclick = () => {
-            audio.volume = this.config.savedVolume;
-            this.renderVolume();
-        };
-
-        volumeBar.onclick = (e) => {
-            e.stopPropagation();
-        };
-
-        //Handle volume bar
-        volumeBar.oninput = (e) => {
-            audio.volume = e.target.value / 100;
-            this.setConfig('currentVolume', audio.volume);
-            this.renderVolume();
-        };
-
-        //---in mobile:touch divice
-        let isTouchingVolume = false;
-        volumeBar.ontouchstart = () => {
-            isTouchingVolume = true;
-        };
-
-        document.ontouchmove = (e) => {
-            if (isTouchingVolume) {
-                e.preventDefault(); // stop scroll when touch move adjust mobile
-            }
-        };
-        document.ontouchend = (e) => {
-            isTouchingVolume = false;
-        };
-        // -------------------
         //Next/Back/random/rotate song
         nextBtns.forEach((nextBtn) => {
             nextBtn.onclick = () => {
@@ -269,8 +235,8 @@ const app = {
                     this.nextSong();
                 }
                 audio.play();
-                this.scrolltoAciveSong();
                 this.render();
+                this.scrolltoAciveSong();
             };
         });
         backBtns.forEach((backBtn) => {
@@ -285,8 +251,8 @@ const app = {
                     audio.currentTime = 0;
                 }
                 audio.play();
-                this.scrolltoAciveSong();
                 this.render();
+                this.scrolltoAciveSong();
             };
         });
         randomBtn.onclick = () => {
@@ -305,6 +271,71 @@ const app = {
             heartBtn.classList.toggle('active', this.isHeart);
         };
 
+        //Handle volume Adjust area
+        highVolumeBtn.onclick = () => {
+            this.setConfig('savedVolume', audio.volume);
+            audio.volume = 0;
+            this.renderVolume();
+        };
+        lowVolumeBtn.onclick = () => {
+            this.setConfig('savedVolume', audio.volume);
+            audio.volume = 0;
+            this.renderVolume();
+        };
+        muteVolumeBtn.onclick = () => {
+            audio.volume = this.config.savedVolume;
+            this.renderVolume();
+        };
+        volumeBar.onclick = (e) => {
+            e.stopPropagation();
+        };
+        //Handle volume bar
+        volumeBar.oninput = (e) => {
+            audio.volume = e.target.value / 100;
+            this.setConfig('currentVolume', audio.volume);
+            this.renderVolume();
+        };
+
+        //---in mobile:touch divice
+        // let isTouchingVolume = false;
+        // volumeBar.ontouchstart = () => {
+        //     isTouchingVolume = true;
+        // };
+        // document.ontouchmove = (e) => {
+        //     if (isTouchingVolume) {
+        //         e.preventDefault(); // stop scroll when touch move adjust mobile
+        //     }
+        // };
+        // document.ontouchend = (e) => {
+        //     isTouchingVolume = false;
+        // };
+        // // -------------------
+
+        //When audiotime change
+        audio.ontimeupdate = () => {
+            //when dont load audio: audio.duration = NaN
+            if (audio.duration) {
+                timeLeft.textContent = this.formatTime(audio.currentTime);
+                // const remainTime = this.formatTime(audio.duration) - audio.currentTime;  `-${remainTime}`
+                timeRight.textContent = this.formatTime(audio.duration);
+
+                const progressPercent = Math.floor((audio.currentTime / audio.duration) * 100);
+                progress.value = progressPercent;
+                progress.style.background = `linear-gradient(to right, var(--primary-color) ${progressPercent}%, rgb(214, 214, 214) ${progressPercent}%)`;
+            }
+        };
+        //Handle seeking audio
+        progress.oninput = (e) => {
+            const seekingTime = audio.duration * (e.target.value / 100);
+            audio.currentTime = Math.floor(seekingTime);
+            this.isPlaying ? audio.play() : audio.pause();
+        };
+        progress.ontouchstart = () => {
+            progress.setAttribute = ('style', 'height: 16px');
+        };
+        progress.ontouchend = () => {
+            progress.setAttribute = ('style', '');
+        };
         //Handle nextsong when audio.end
         audio.onended = () => {
             if (this.isRepeat) {
@@ -320,28 +351,10 @@ const app = {
             if (songClick) {
                 this.currentIndex = +songClick.getAttribute('index');
                 this.loadCurrentSong();
+                // this.setConfig('currentIndex', this.currentIndex);
                 this.render();
                 audio.play();
             }
-        };
-
-        switchListUI.onclick = () => {
-            dashboard.style.display = 'none';
-            playlistplusHeader.style.display = '';
-            playList.classList.add('mini');
-            playerMini.classList.add('mini');
-            playlistplus.classList.add('mini');
-            playerMini.style.display = 'flex';
-            this.scrolltoAciveSong();
-        };
-        closeList.onclick = () => {
-            playList.classList.remove('mini');
-            playlistplus.classList.remove('mini');
-            playerMini.classList.remove('mini');
-            dashboard.style.display = '';
-            playlistplusHeader.style.display = 'none';
-            playerMini.style.display = 'none';
-            this.scrolltoAciveSong();
         };
     },
 
@@ -365,6 +378,7 @@ const app = {
             this.currentIndex = 0;
         }
         this.loadCurrentSong();
+        // this.setConfig('currentIndex', this.currentIndex);
     },
     backSong() {
         this.currentIndex--;
@@ -372,6 +386,7 @@ const app = {
             this.currentIndex = 0;
         }
         this.loadCurrentSong();
+        // this.setConfig('currentIndex', this.currentIndex);
     },
 
     renderVolume() {
@@ -390,7 +405,7 @@ const app = {
         }
         volumeBtn.classList.toggle('mute', this.isMuteVolume);
         volumeBtn.classList.toggle('low', this.isLowVolume);
-        volumeBar.style.background = `linear-gradient(to right, rgb(147, 113, 243) ${
+        volumeBar.style.background = `linear-gradient(to right, var(--primary-color) ${
             audio.volume * 100
         }%, rgb(214, 214, 214) ${audio.volume * 100}%`;
         volumeBar.value = audio.volume * 100;
@@ -402,18 +417,23 @@ const app = {
         } while (newIndex === this.currentIndex);
         this.currentIndex = newIndex;
         this.loadCurrentSong();
+        // this.setConfig('currentIndex', this.currentIndex);
     },
 
     scrolltoAciveSong() {
-        $('.song.songplaying').scrollIntoView({
-            behavior: 'smooth',
-            // block: 'end',
-        });
+        setTimeout(
+            $('.song.songplaying').scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+            }),
+            300,
+        );
     },
     loadConfig() {
         this.isRandom = this.config.isRandom;
         this.isRepeat = this.config.isRepeat;
         this.isHeart = this.config.isHeart;
+        // this.currentIndex = this.config.currentIndex;
         audio.volume = this.config.currentVolume;
     },
 
