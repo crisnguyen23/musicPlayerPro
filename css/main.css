@@ -72,7 +72,7 @@ body.light {
 }
 
 .dashboard {
-  height: 426px;
+  height: 435px;
   max-width: inherit;
   width: 96dvw;
   margin: 0px auto;
@@ -167,28 +167,24 @@ body.light {
 .dashboard__control .btn-volume {
   position: relative;
 }
-.dashboard__control .btn-volume-low {
+.dashboard__control .btn-volume-low, .dashboard__control .btn-volume-mute {
   display: none;
 }
-.dashboard__control .btn-volume-mute {
-  display: none;
+.dashboard__control .btn-volume-high {
+  display: inline-block;
 }
 .dashboard__control .btn-volume.mute .btn-volume-mute {
   display: inline-block;
 }
+.dashboard__control .btn-volume.mute .btn-volume-low,
 .dashboard__control .btn-volume.mute .btn-volume-high {
-  display: none;
-}
-.dashboard__control .btn-volume.mute .btn-volume-low {
   display: none;
 }
 .dashboard__control .btn-volume.low .btn-volume-low {
   display: inline-block;
 }
+.dashboard__control .btn-volume.low .btn-volume-mute,
 .dashboard__control .btn-volume.low .btn-volume-high {
-  display: none;
-}
-.dashboard__control .btn-volume.low .btn-volume-mute {
   display: none;
 }
 .dashboard__control .btn-volume .volume-bar {
@@ -258,7 +254,7 @@ body.light {
   }
 }
 .playlist {
-  height: calc(86dvh - 436px);
+  height: calc(86dvh - 445px);
   margin-top: 10px;
   padding: 7px 20px 0 20px;
   overflow: auto;

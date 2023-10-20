@@ -1,5 +1,5 @@
 .dashboard {
-    height: 426px;
+    height: 435px;
     max-width: inherit;
     width: 96dvw;
     margin: 0px auto;
@@ -120,12 +120,13 @@
         //volume
         .btn-volume {
             position: relative;
-            &-low {
+            &-low,
+            &-mute {
                 display: none;
             }
 
-            &-mute {
-                display: none;
+            &-high {
+                display: inline-block;
             }
 
             &.mute {
@@ -133,11 +134,8 @@
                     display: inline-block;
                 }
 
+                .btn-volume-low,
                 .btn-volume-high {
-                    display: none;
-                }
-
-                .btn-volume-low {
                     display: none;
                 }
             }
@@ -147,11 +145,8 @@
                     display: inline-block;
                 }
 
+                .btn-volume-mute,
                 .btn-volume-high {
-                    display: none;
-                }
-
-                .btn-volume-mute {
                     display: none;
                 }
             }
