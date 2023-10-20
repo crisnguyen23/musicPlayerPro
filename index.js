@@ -201,15 +201,6 @@ const app = {
             e.stopPropagation();
         };
 
-        // // //Zoomin-out CD thumb when scroll
-        // const cdWidth = cd.offsetWidth;
-        // document.onscroll = () => {
-        //     const scrollTop = window.scrollY || document.documentElement.scrollTop;
-        //     const newCdWidth = cdWidth - scrollTop;
-        //     cd.style.width = newCdWidth >= 0 ? newCdWidth + 'px' : 0;
-        //     cd.style.opacity = newCdWidth / cdWidth;
-        // };
-
         //Handle CD rotate //animate() method: animate([keyframe], {time}
         const cdThumbAnimate = cdThumb.animate([{ transform: 'rotate(360deg)' }], {
             duration: 10000, //10s 1 period
@@ -320,21 +311,6 @@ const app = {
             this.renderVolume();
         };
 
-        //---in mobile:touch divice
-        // let isTouchingVolume = false;
-        // volumeBar.ontouchstart = () => {
-        //     isTouchingVolume = true;
-        // };
-        // document.ontouchmove = (e) => {
-        //     if (isTouchingVolume) {
-        //         e.preventDefault(); // stop scroll when touch move adjust mobile
-        //     }
-        // };
-        // document.ontouchend = (e) => {
-        //     isTouchingVolume = false;
-        // };
-        // // -------------------
-
         //When audiotime change
         audio.ontimeupdate = () => {
             //when dont load audio: audio.duration = NaN
@@ -381,7 +357,33 @@ const app = {
                 audio.play();
             }
         };
+
+        // Handle event keyboard for control audio
+        document.onkeydown = (e) => {
+            if (e.key === ' ') {
+                this.isPlaying ? audio.pause() : audio.play();
+            }
+            if (e.key === 'ArrowRight') {
+                nextBtns[0].click();
+            }
+
+            if (e.key === 'ArrowLeft') {
+                backBtns[0].click();
+            }
+
+            if (e.key === 'm' || e.key === 'M') {
+                this.isMuteVolume = !this.isMuteVolume;
+                if (this.isMuteVolume) {
+                    this.setConfig('savedVolume', audio.volume);
+                    audio.volume = 0;
+                } else {
+                    audio.volume = this.config.savedVolume;
+                }
+                this.renderVolume();
+            }
+        };
     },
+    // ---------------------End Handel evetns--------
 
     formatTime(time) {
         let minutes = Math.floor(time / 60);
