@@ -1,0 +1,235 @@
+.dashboard {
+    height: 426px;
+    max-width: inherit;
+    width: 96dvw;
+    margin: 0px auto;
+    background-image: linear-gradient(
+        -45deg,
+        rgb(255, 60, 172, 0.6) 0%,
+        rgb(120, 75, 160, 0.4) 50%,
+        rgb(43, 134, 197, 0.3) 100%
+    );
+    background-color: rgba(0, 0, 0, 0.4);
+    box-shadow: 0px 0px 7px 3px rgba(255, 255, 255, 0.4);
+    border-radius: 20px;
+    text-align: center;
+    padding: 0 10px;
+    animation: dashboardUp ease-in-out 0.7s;
+
+    &.light {
+        background-image: linear-gradient(-145deg, rgba(68, 194, 255, 0.7) 0%, rgb(249 147 147 / 40%) 80%);
+    }
+    //Start Header-Dashboard
+    &__header {
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .status {
+            color: var(--primary-color);
+        }
+
+        .btn-moon {
+            display: none;
+            animation: moonDownIn ease 0.6s;
+
+            &:hover {
+                transition: 0.6s ease;
+                color: #9371f3;
+                rotate: 60deg;
+            }
+        }
+
+        .btn-sun {
+            animation: sunUpIn ease 0.6s;
+            font-size: 30px;
+
+            &:hover {
+                transition: 0.6s ease;
+                color: #fe9835;
+                rotate: 60deg;
+            }
+        }
+
+        .switchtheme.light {
+            .btn-moon {
+                display: inline-block;
+            }
+
+            .btn-sun {
+                display: none;
+            }
+        }
+    }
+    //End Header-Dashboard
+
+    &__cd {
+        height: 200px;
+        width: 200px;
+        display: flex;
+        margin: auto;
+    }
+
+    &__cd-thumb {
+        width: 100%;
+        border-radius: 50%;
+        background-size: cover;
+        box-shadow: 0 0 8px 5px rgba(255, 255, 255, 0.5);
+    }
+
+    &__songname {
+        padding: 15px 0;
+        font-size: 20px;
+    }
+
+    &__control {
+        display: flex;
+        justify-content: space-between;
+
+        .btn-togger-play {
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            width: 54px;
+            height: 54px;
+        }
+
+        .btn-pause,
+        .btn-play {
+            font-size: 28px;
+            &:hover {
+                opacity: 0.6;
+                color: #fff;
+            }
+        }
+
+        .btn-pause {
+            display: none;
+        }
+
+        .btn-togger-play.playing {
+            .btn-pause {
+                display: inline-block;
+            }
+
+            .btn-play {
+                display: none;
+            }
+        }
+
+        //volume
+        .btn-volume {
+            position: relative;
+            &-low {
+                display: none;
+            }
+
+            &-mute {
+                display: none;
+            }
+
+            &.mute {
+                .btn-volume-mute {
+                    display: inline-block;
+                }
+
+                .btn-volume-high {
+                    display: none;
+                }
+
+                .btn-volume-low {
+                    display: none;
+                }
+            }
+
+            &.low {
+                .btn-volume-low {
+                    display: inline-block;
+                }
+
+                .btn-volume-high {
+                    display: none;
+                }
+
+                .btn-volume-mute {
+                    display: none;
+                }
+            }
+
+            .volume-bar {
+                position: absolute;
+                top: -55px;
+                right: -24px;
+                transform: rotate(-90deg);
+                width: 90px;
+                transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+                cursor: pointer;
+                appearance: none;
+                border-radius: 10px;
+                height: 12px;
+                visibility: hidden;
+                background: linear-gradient(to right, rgb(147, 113, 243) 100%, rgb(214, 214, 214) 100%);
+            }
+
+            &:hover {
+                .volume-bar {
+                    visibility: visible;
+                }
+            }
+        }
+    }
+
+    &__duration-bar {
+        padding: 15px 0;
+        display: flex;
+        align-items: center;
+
+        .progress {
+            appearance: none;
+            height: 5px;
+            width: 100%;
+            margin: 0 10px;
+            border-radius: 10px;
+            transition: opacity 0.2s ease-in-out;
+            outline: none;
+
+            &:hover {
+                height: 16px;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+@keyframes dashboardUp {
+    from {
+        opacity: 0.4;
+        transform: translateY(220px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes sunUpIn {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes moonDownIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

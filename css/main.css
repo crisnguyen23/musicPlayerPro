@@ -16,20 +16,6 @@ html {
   --text-color: #fff;
 }
 
-body {
-  background: url(../assets/img/background-dark.png);
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-body.light {
-  background: url(../assets/img/background-light.png);
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  --primary-color: #fe9835;
-}
-
 .btn {
   font-size: 25px;
   padding: 13px;
@@ -45,6 +31,20 @@ body.light {
   color: var(--primary-color);
 }
 
+body {
+  background: url(../assets/img/background-dark.png);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+body.light {
+  background: url(../assets/img/background-light.png);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  --primary-color: #fe9835;
+}
+
 #wrapper {
   position: relative;
   max-width: 480px;
@@ -54,8 +54,8 @@ body.light {
 }
 
 .header {
-  height: 7dvh;
-  margin-bottom: 1dvh;
+  height: 8dvh;
+  line-height: 8dvh;
   font-weight: 700;
   font-size: 40px;
   text-transform: uppercase;
@@ -71,31 +71,24 @@ body.light {
   text-shadow: none;
 }
 
-#musicplayer {
-  position: fixed;
-  top: 0;
-  width: inherit;
-  max-width: inherit;
-  padding: 0 8px;
-}
-
 .dashboard {
-  height: 51dvh;
+  height: 426px;
+  max-width: inherit;
+  width: 96dvw;
+  margin: 0px auto;
   background-image: linear-gradient(-45deg, rgba(255, 60, 172, 0.6) 0%, rgba(120, 75, 160, 0.4) 50%, rgba(43, 134, 197, 0.3) 100%);
   background-color: rgba(0, 0, 0, 0.4);
   box-shadow: 0px 0px 7px 3px rgba(255, 255, 255, 0.4);
   border-radius: 20px;
   text-align: center;
-  padding: 10px;
-  padding-top: 0;
+  padding: 0 10px;
   animation: dashboardUp ease-in-out 0.7s;
 }
 .dashboard.light {
   background-image: linear-gradient(-145deg, rgba(68, 194, 255, 0.7) 0%, rgba(249, 147, 147, 0.4) 80%);
 }
 .dashboard__header {
-  height: 6dvh;
-  margin-bottom: 1dvh;
+  margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -114,6 +107,7 @@ body.light {
 }
 .dashboard__header .btn-sun {
   animation: sunUpIn ease 0.6s;
+  font-size: 30px;
 }
 .dashboard__header .btn-sun:hover {
   transition: 0.6s ease;
@@ -127,8 +121,8 @@ body.light {
   display: none;
 }
 .dashboard__cd {
-  height: 24dvh;
-  width: 24dvh;
+  height: 200px;
+  width: 200px;
   display: flex;
   margin: auto;
 }
@@ -139,12 +133,10 @@ body.light {
   box-shadow: 0 0 8px 5px rgba(255, 255, 255, 0.5);
 }
 .dashboard__songname {
-  margin: 2dvh 0;
-  height: 3dvh;
+  padding: 15px 0;
   font-size: 20px;
 }
 .dashboard__control {
-  height: 7dvh;
   display: flex;
   justify-content: space-between;
 }
@@ -217,10 +209,8 @@ body.light {
   visibility: visible;
 }
 .dashboard__duration-bar {
-  height: 4dvh;
-  margin: 1dvh 0;
+  padding: 15px 0;
   display: flex;
-  padding: 6px 0;
   align-items: center;
 }
 .dashboard__duration-bar .progress {
@@ -237,18 +227,41 @@ body.light {
   cursor: pointer;
 }
 
-.playlist {
-  height: 34dvh;
-  margin-top: 60dvh;
-  padding: 10px 20px 0;
-  overflow: auto;
-  margin-bottom: 1dvh;
+@keyframes dashboardUp {
+  from {
+    opacity: 0.4;
+    transform: translateY(220px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-.playlist.mini {
-  height: 68dvh;
-  margin: 1dvh;
-  margin-bottom: 0;
-  padding: 10px;
+@keyframes sunUpIn {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes moonDownIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.playlist {
+  height: calc(86dvh - 436px);
+  margin-top: 10px;
+  padding: 7px 20px 0 20px;
+  overflow: auto;
 }
 .playlist .song {
   background-image: linear-gradient(-45deg, rgba(255, 60, 172, 0.5) 0%, rgba(120, 75, 160, 0.5) 50%, rgba(43, 134, 197, 0.5) 100%);
@@ -299,9 +312,10 @@ body.light {
 }
 
 .playlistplus.mini {
+  position: relative;
+  margin: 0 auto;
   height: 86dvh;
   width: 96dvw;
-  margin: 8dvh 2dvw 1dvh 2dvw;
   max-width: inherit;
   background-image: linear-gradient(-45deg, rgba(255, 60, 172, 0.6) 0%, rgba(120, 75, 160, 0.4) 50%, rgba(43, 134, 197, 0.3) 100%);
   background-color: rgba(0, 0, 0, 0.4);
@@ -312,8 +326,7 @@ body.light {
   background-image: linear-gradient(-145deg, rgba(68, 194, 255, 0.7) 0%, rgba(249, 147, 147, 0.4) 80%);
 }
 .playlistplus__header {
-  height: 7dvh;
-  padding: 10px 0px 0 10px;
+  padding: 10px 0px 2px 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -322,19 +335,27 @@ body.light {
   font-size: 23px;
 }
 
+.playlist.mini {
+  height: calc(100% - 140px);
+  padding: 20px;
+  padding-top: 7px;
+}
+
 .playermini {
-  height: 10dvh;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  padding: 14px;
+  padding-right: 0;
   background-image: linear-gradient(-45deg, rgba(255, 60, 172, 0.5) 0%, rgba(120, 75, 160, 0.5) 50%, rgba(43, 134, 197, 0.5) 100%);
   background-color: var(--primary-color);
+  box-shadow: 0 0 8px 5px rgba(255, 255, 255, 0.5);
+  display: none;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
-  padding-right: 0;
   border-radius: 20px;
-  display: none;
   animation: playerMiniDown 0.7s ease-in-out;
-  position: relative;
-  box-shadow: 0 0 8px 5px rgba(255, 255, 255, 0.5);
   overflow: hidden;
 }
 .playermini__timer {
@@ -396,9 +417,19 @@ body.light {
   display: none;
 }
 
+@keyframes playerMiniDown {
+  from {
+    opacity: 0.6;
+    transform: translateY(-580px);
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
 #dev {
-  height: 5dvh;
-  margin: 0;
+  height: 6dvh;
+  line-height: 6dvh;
   text-align: center;
   font-weight: 500;
   font-size: 18px;
@@ -415,46 +446,6 @@ body.light {
   color: #5a228f;
 }
 
-@keyframes moonDownIn {
-  from {
-    transform: translateY(-50px);
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-@keyframes sunUpIn {
-  from {
-    transform: translateY(50px);
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-@keyframes playerMiniDown {
-  from {
-    opacity: 0.6;
-    transform: translateY(-580px);
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-@keyframes dashboardUp {
-  from {
-    opacity: 0.4;
-    transform: translateY(580px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 @media (width < 480px) {
   .btn:hover {
     opacity: 1;

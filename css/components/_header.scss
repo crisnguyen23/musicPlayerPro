@@ -1,0 +1,41 @@
+body {
+    background: url(../assets/img/background-dark.png);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    &.light {
+        background: url(../assets/img/background-light.png);
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        --primary-color: #fe9835;
+    }
+}
+
+#wrapper {
+    position: relative;
+    max-width: 480px;
+    width: 100%;
+    margin: 0 auto;
+    color: var(--text-color);
+}
+
+.header {
+    height: 8dvh;
+    line-height: 8dvh;
+    font-weight: 700;
+    font-size: 40px;
+    text-transform: uppercase;
+    text-align: center;
+    background: linear-gradient(to bottom, #a9c9ff 0%, #ffbbec 100%);
+    -webkit-background-clip: text;
+    color: transparent;
+    text-shadow: 5px 5px 10px rgba(255, 255, 255, 0.5);
+
+    &.light {
+        background: linear-gradient(to bottom, #fe9835 0%, #f9f9b1 100%);
+        -webkit-background-clip: text;
+        text-shadow: none;
+    }
+}

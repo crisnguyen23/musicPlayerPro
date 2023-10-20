@@ -14,6 +14,7 @@ const playerMini = $('.playermini');
 const playerMiniThumb = $('.playermini__thumb');
 const playerMiniTitle = $('.playermini__body__title');
 const playerMiniAuthor = $('.playermini__body__author');
+const playerMiniControl = $('.playermini__control');
 
 const switchListUI = $('.btn-down');
 const closeList = $('.btn-closelist');
@@ -177,7 +178,8 @@ const app = {
             playerMini.style.display = 'flex';
             this.scrolltoAciveSong();
         };
-        closeList.onclick = () => {
+
+        const closePlayList = () => {
             playList.classList.remove('mini');
             playlistplus.classList.remove('mini');
             playerMini.classList.remove('mini');
@@ -185,6 +187,18 @@ const app = {
             playlistplusHeader.style.display = 'none';
             playerMini.style.display = 'none';
             this.scrolltoAciveSong();
+        };
+
+        closeList.onclick = () => {
+            closePlayList();
+        };
+
+        playerMini.onclick = () => {
+            closePlayList();
+        };
+
+        playerMiniControl.onclick = (e) => {
+            e.stopPropagation();
         };
 
         // // //Zoomin-out CD thumb when scroll

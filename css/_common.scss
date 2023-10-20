@@ -1,0 +1,15 @@
+.btn {
+    font-size: 25px;
+    padding: 13px;
+    width: 49px;
+    height: 49px;
+
+    &:hover {
+        opacity: 0.7;
+        cursor: pointer;
+    }
+}
+
+.active {
+    color: var(--primary-color);
+}
