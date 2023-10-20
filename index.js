@@ -44,15 +44,15 @@ const progress = $('.progress');
 const progressMini = $('.playermini__timer');
 
 const app = {
-    currentIndex: 0,
-    passIndex: [0],
     isMuteVolume: false,
     isLowVolume: false,
     isLightTheme: false,
     isPlaying: false,
+    currentIndex: 0,
     //load infro from json local storage
     config: JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY)) || {
-        // currentIndex: 0,
+        currentIndex: 0,
+        passIndex: [0],
         isRepeat: false,
         isRandom: false,
         isHeart: false,
@@ -376,7 +376,7 @@ const app = {
             if (songClick) {
                 this.currentIndex = +songClick.getAttribute('index');
                 this.loadCurrentSong();
-                // this.setConfig('currentIndex', this.currentIndex);
+                this.setConfig('currentIndex', this.currentIndex);
                 this.render();
                 audio.play();
             }
@@ -403,7 +403,7 @@ const app = {
             this.currentIndex = 0;
         }
         this.loadCurrentSong();
-        // this.setConfig('currentIndex', this.currentIndex);
+        this.setConfig('currentIndex', this.currentIndex);
     },
     backSong() {
         this.currentIndex--;
@@ -411,7 +411,7 @@ const app = {
             this.currentIndex = 0;
         }
         this.loadCurrentSong();
-        // this.setConfig('currentIndex', this.currentIndex);
+        this.setConfig('currentIndex', this.currentIndex);
     },
 
     renderVolume() {
@@ -436,16 +436,16 @@ const app = {
         volumeBar.value = audio.volume * 100;
     },
     randomSong() {
-        console.log(this.passIndex);
         this.passIndex = this.passIndex.length >= this.songs.length ? [this.currentIndex] : this.passIndex;
         let newIndex;
         do {
             newIndex = Math.floor(Math.random() * this.songs.length);
-        } while (this.passIndex.indexOf(newIndex) === -1 ? false : true);
+        } while (this.passIndex.includes(newIndex));
         this.passIndex.push(newIndex);
         this.currentIndex = newIndex;
         this.loadCurrentSong();
-        // this.setConfig('currentIndex', this.currentIndex);
+        this.setConfig('currentIndex', this.currentIndex);
+        this.setConfig('passIndex', this.passIndex);
     },
 
     scrolltoAciveSong() {
@@ -461,7 +461,8 @@ const app = {
         this.isRandom = this.config.isRandom;
         this.isRepeat = this.config.isRepeat;
         this.isHeart = this.config.isHeart;
-        // this.currentIndex = this.config.currentIndex;
+        this.currentIndex = this.config.currentIndex;
+        this.passIndex = this.config.passIndex;
         audio.volume = this.config.currentVolume;
     },
 
@@ -469,7 +470,7 @@ const app = {
         this.loadConfig();
         this.defineProperties();
         this.render();
-
+        this.scrolltoAciveSong();
         this.handleEvents();
 
         this.loadCurrentSong();
