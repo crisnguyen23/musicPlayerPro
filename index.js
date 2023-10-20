@@ -24,8 +24,10 @@ const playlistplusHeader = $('.playlistplus__header');
 const switchTheme = $('.switchtheme');
 
 const cd = $('.dashboard__cd');
-const cdThumb = $('.dashboard__cd-thumb');
 const cdName = $('.dashboard__songname');
+const cdThumb = $('.dashboard__cd-thumb');
+const cdThumbMini = $('.playermini__thumb');
+
 const randomBtn = $('.btn-random');
 const repeatBtn = $('.btn-repeat');
 const heartBtn = $('.btn-heart');
@@ -38,9 +40,11 @@ const volumeBar = $('.volume-bar');
 const timeLeft = $('.time-left');
 const timeRight = $('.time-right');
 const progress = $('.progress');
+const progressMini = $('.playermini__timer');
 
 const app = {
     currentIndex: 0,
+    passIndex: [0],
     isMuteVolume: false,
     isLowVolume: false,
     isLightTheme: false,
@@ -61,64 +65,64 @@ const app = {
 
     songs: [
         {
-            name: 'Lac Troi Remix',
-            singer: 'Mono x MTP',
-            path: './assets/music/waiitingforYou.mp3',
-            image: './assets/img/lactroi.png',
+            name: 'Sunset Avenue',
+            singer: 'Charlieonnafriday',
+            path: './assets/music/01SunsetAvenueCharlieonnaFriday.mp3',
+            image: './assets/img/01.png',
         },
         {
-            name: 'SCHDTX 4',
-            singer: 'Dick x Ngắn',
-            path: './assets/music/songChoHetDoiThanhXuan.mp3',
-            image: './assets/img/songchohetdoithanhxuan.png',
+            name: 'Nevada',
+            singer: 'Victone',
+            path: './assets/music/02Nevada-Vicetone.mp3',
+            image: './assets/img/02.png',
         },
         {
-            name: 'Khi cơn mưa dần phai',
+            name: 'The nights',
+            singer: 'Avicii - Citycreed cover',
+            path: './assets/music/03TheNights-Avicii.mp3',
+            image: './assets/img/03.png',
+        },
+        {
+            name: "Chillin'",
+            singer: 'Charlieonnafriday',
+            path: './assets/music/04Chillin.mp3',
+            image: './assets/img/04.png',
+        },
+        {
+            name: 'Turn Back Time',
+            singer: 'Daniel Schulz',
+            path: './assets/music/05.DanielSchulzTurnBackTime.mp3',
+            image: './assets/img/05.png',
+        },
+        {
+            name: 'Walk Thru Fire',
+            singer: 'Vicetone',
+            path: './assets/music/08WalkThruFire-Vicetone.mp3',
+            image: './assets/img/08.png',
+        },
+        {
+            name: 'Unity',
+            singer: 'Alan Walkers',
+            path: 'assets/music/08UnityAlanWalker.mp3',
+            image: './assets/img/09.png',
+        },
+        {
+            name: 'Khi  cơn mưa dần phai',
             singer: 'Tez x Myra Trần',
-            path: './assets/music/khiConMuaDanPhai.mp3',
-            image: './assets/img/khiConMuaDanPhai.png',
+            path: './assets/music/06khiConMuaDanPhai.mp3',
+            image: './assets/img/06.png',
         },
         {
             name: 'Truy Lùng Bảo Vật',
             singer: '24K.Right x Sofia',
-            path: './assets/music/TruyLungBaoVat.mp3',
-            image: './assets/img/truyLungBaoVat.png',
+            path: './assets/music/07TruyLungBaoVat.mp3',
+            image: './assets/img/07.png',
         },
         {
-            name: 'Rolling Down',
-            singer: 'Captain',
-            path: './assets/music/rollingdown.mp3',
-            image: './assets/img/Captain.png',
-        },
-        {
-            name: 'Thanh âm miền núi',
-            singer: 'Double2T x Thảo My',
-            path: './assets/music/thanhAmMienNui.mp3',
-            image: './assets/img/ThanhAmmiennui.png',
-        },
-        {
-            name: 'Khóc cùng em',
-            singer: 'Mr.Siro',
-            path: './assets/music/khocCungEm.mp3',
-            image: './assets/img/khoccungem.png',
-        },
-        {
-            name: 'Để em rời xa',
-            singer: 'FBoiz',
-            path: './assets/music/DeEmRoiXaFBoiz.mp3',
-            image: './assets/img/DeEmRoiXa.png',
-        },
-        {
-            name: 'Ngôi nhà hạnh phúc  ',
+            name: 'Ngôi nhà hạnh phúc',
             singer: 'Trung Quân',
-            path: './assets/music/ngoiNhaHanhPhuc.mp3',
-            image: './assets/img/NgoinhaHanhPhuc.png',
-        },
-        {
-            name: 'Cô đơn trên Sofa',
-            singer: 'Trung Quân',
-            path: './assets/music/coDonTrenSofaTrungQuan.mp3',
-            image: './assets/img/CoDontrenSofa.png',
+            path: './assets/music/10ngoiNhaHanhPhuc.mp3',
+            image: './assets/img/10.png',
         },
     ],
 
@@ -164,7 +168,6 @@ const app = {
             playlistplus.classList.toggle('light', this.isLightTheme);
             this.render();
         };
-
         switchListUI.onclick = () => {
             dashboard.style.display = 'none';
             playlistplusHeader.style.display = '';
@@ -193,12 +196,18 @@ const app = {
         //     cd.style.opacity = newCdWidth / cdWidth;
         // };
 
-        //Handle CD rotate //need learn more animate API
+        //Handle CD rotate //animate() method: animate([keyframe], {time}
         const cdThumbAnimate = cdThumb.animate([{ transform: 'rotate(360deg)' }], {
             duration: 10000, //10s 1 period
-            iteration: Infinity,
+            iterations: Infinity,
         });
         cdThumbAnimate.pause();
+
+        const cdThumbAnimateMini = cdThumbMini.animate([{ transform: 'rotate(360deg)' }], {
+            duration: 10000, //10s 1 period
+            iterations: Infinity,
+        });
+        cdThumbAnimateMini.pause();
 
         // Click play
         playBtns.forEach(
@@ -206,7 +215,6 @@ const app = {
                 (playBtn.onclick = () => {
                     //arrow function do not create closure => still use this
                     this.isPlaying ? audio.pause() : audio.play();
-                    console.log(this.isPlaying);
                 }),
         );
 
@@ -217,6 +225,7 @@ const app = {
                 playBtn.classList.add('playing');
             });
             cdThumbAnimate.play();
+            cdThumbAnimateMini.play();
         };
         audio.onpause = () => {
             this.isPlaying = false;
@@ -224,6 +233,7 @@ const app = {
                 playBtn.classList.remove('playing');
             });
             cdThumbAnimate.pause();
+            cdThumbAnimateMini.pause();
         };
 
         //Next/Back/random/rotate song
@@ -322,6 +332,7 @@ const app = {
                 const progressPercent = Math.floor((audio.currentTime / audio.duration) * 100);
                 progress.value = progressPercent;
                 progress.style.background = `linear-gradient(to right, var(--primary-color) ${progressPercent}%, rgb(214, 214, 214) ${progressPercent}%)`;
+                progressMini.style.width = progressPercent + '%';
             }
         };
         //Handle seeking audio
@@ -411,10 +422,13 @@ const app = {
         volumeBar.value = audio.volume * 100;
     },
     randomSong() {
+        console.log(this.passIndex);
+        this.passIndex = this.passIndex.length >= this.songs.length ? [this.currentIndex] : this.passIndex;
         let newIndex;
         do {
             newIndex = Math.floor(Math.random() * this.songs.length);
-        } while (newIndex === this.currentIndex);
+        } while (this.passIndex.indexOf(newIndex) === -1 ? false : true);
+        this.passIndex.push(newIndex);
         this.currentIndex = newIndex;
         this.loadCurrentSong();
         // this.setConfig('currentIndex', this.currentIndex);
@@ -439,7 +453,6 @@ const app = {
 
     start() {
         this.loadConfig();
-
         this.defineProperties();
         this.render();
 
