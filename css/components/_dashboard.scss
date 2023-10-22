@@ -198,8 +198,8 @@
 
 @keyframes dashboardUp {
     from {
-        opacity: 0.4;
-        transform: translateY(220px);
+        opacity: 0.6;
+        transform: translateY(calc(86dvh - 445px));
     }
     to {
         opacity: 1;

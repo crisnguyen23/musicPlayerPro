@@ -204,7 +204,7 @@ const app = {
             iterations: Infinity,
         });
         cdThumbAnimate.pause();
-        
+
         const cdThumbAnimateMini = cdThumbMini.animate([{ transform: 'rotate(360deg)' }], {
             duration: 10000, //10s 1 period
             iterations: Infinity,
@@ -466,7 +466,7 @@ const app = {
     },
 
     start() {
-        this.loadConfig(); 
+        this.loadConfig();
         this.defineProperties();
         this.render();
         this.handleEvents();
