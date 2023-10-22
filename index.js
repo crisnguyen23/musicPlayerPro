@@ -178,7 +178,6 @@ const app = {
             playerMini.style.display = 'flex';
             this.scrolltoAciveSong();
         };
-
         const closePlayList = () => {
             playList.classList.remove('mini');
             playlistplus.classList.remove('mini');
@@ -188,11 +187,9 @@ const app = {
             playerMini.style.display = 'none';
             this.scrolltoAciveSong();
         };
-
         closeList.onclick = () => {
             closePlayList();
         };
-
         playerMini.onclick = () => {
             closePlayList();
         };
@@ -207,7 +204,7 @@ const app = {
             iterations: Infinity,
         });
         cdThumbAnimate.pause();
-
+        
         const cdThumbAnimateMini = cdThumbMini.animate([{ transform: 'rotate(360deg)' }], {
             duration: 10000, //10s 1 period
             iterations: Infinity,
@@ -469,13 +466,13 @@ const app = {
     },
 
     start() {
-        this.loadConfig();
+        this.loadConfig(); 
         this.defineProperties();
         this.render();
-        this.scrolltoAciveSong();
         this.handleEvents();
 
         this.loadCurrentSong();
+        this.scrolltoAciveSong();
 
         //DIsplay inital staus
         this.renderVolume();
