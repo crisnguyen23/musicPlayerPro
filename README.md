@@ -1,5 +1,5 @@
  <div align="center">
- <img src="./readme-images/logo.png" /> <h2>Music Player Web </h2>
+ <img src="./readme-images/logo.png" style="width: 50px" /> <h2 >Music Player Web </h2>
             MusicPlayer is a fully responsive website page, <br />Responsive for all devices all screens, built using Vanilla JavaScript, HMTL, BEM, SCSS, Local Storage.
             </br>
             <a href="https://crisnguyen23.github.io/musicPlayerPro/"><strong>➥ Live Demo</strong></a>
